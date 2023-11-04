@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS文本外观之文本缩进</title>
+    <style>
+        p {
+            font-size: 24px;
+
+            /* 如果此时写了 2em 则是缩进当前元素 2 个文字大小的距离 */
+            text-indent: 2em;
+        }
+    </style>
+</head>
+<body>
+    <p>雖然我們登入 Linux 主機的時候，輸入的是我們的帳號，但是其實 Linux 主機並不會直接認識你的『帳號名稱』的，
+    他僅認識 ID 啊 (ID 就是一組號碼啦)。 由於電腦僅認識 0 與 1，所以主機對於數字比較有概念的；至於帳號只是為了讓人們容易記憶而已。 
+    而你的 ID 與帳號的對應就在 /etc/passwd 當中哩。</p>
+
+    <p>那麼到底有幾種 ID 呢？還記得我們在第五章內有提到過， 每一個檔案都具有『擁有人與擁有群組』的屬性嗎？
+    沒錯啦～每個登入的使用者至少都會取得兩個 ID ，一個是使用者 ID (User ID ，簡稱 UID)、一個是群組 ID (Group ID ，簡稱 GID)。</p>
+</body>
+</html>

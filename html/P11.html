@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        h6 {
+            color: blue;
+        }
+    </style>
+</head>
+<body>
+   <h2>IP-SAN调研报告</h2>
+<h3>1 前言</h3>
+<p>随着时代的发展、科技的进步，越来越多的需求要得到满足，随之而来的是各种技术层出不穷；其中存储成为一大难题，做为服务器的系统通常是需要储存设备的，而储存设备除了可以使用系统内建的磁盘之外，如果内建的磁盘容量不够大， 而且也没有额外的磁盘插槽 (SATA 或 IDE) 可用时，那么常见解决的方案就是增加 NAS (网络附加储存服务器) 或外接式储存设备。再高档一点的系统，可能就会用到 SAN (储存局域网络),本次调研的对象便是网络存储技术IP-SAN.</p>
+<h3>2 IP-SAN简要陈述</h3>
+<p>IP SAN简称SAN（Storage Area Network），中文意思存储局域网络，IP SAN使存储空间得到更加充分的利用，并使得安装和管理更加有效。</p>
+SAN是一种将存储设备、连接设备和接口集成在一个高速网络中的技术。SAN本身就是一个存储网络，承担了数据存储任务，SAN网络与LAN业务网络相隔离，存储数据流不会占用业务网络带宽。
+在SAN网络中，所有的数据传输在高速、高带宽的网络中进行，SAN存储实现的是直接对物理硬件的块级存储访问，提高了存储的性能和升级能力。
+早期的SAN采用的是光纤通道（FC，Fiber Channel）技术，所以，以前的SAN多指采用光纤通道的存储局域网络，到了iSCSI协议出现以后，为了区分，业界就把SAN分为FC SAN和IP SAN。
+iSCSI（互联网小型计算机系统接口）是一种在TCP/IP上进行数据块传输的标准。它是由Cisco和IBM两家发起的，并且得到了各大存储厂商的大力支持。iSCSI可以实现在IP网络上运行SCSI协议，使其能够在诸如高速千兆以太网上进行快速的数据存取备份操作。
+iSCSI标准在2003年2月11日由IETF（互联网工程任务组）认证通过。iSCSI继承了两大最传统技术：SCSI和
+TCP/IP协议。这为iSCSI的发展奠定了坚实的基础。
+基于iSCSI的存储系统只需要不多的投资便可实现SAN存储功能，甚至直接利用现有的TCP/IP网络。相对于以往的网络存储技术，它解决了开放性、容量、传输速度、兼容性、安全性等问题，其优越的性能使其备受关注与青睐。
+在实际工作时，是将SCSI命令和数据封装到TCP/IP包中，然后通过IP网络进行传输。具体的工作流程如下：
+<a href="#test">(1) iSCSI系统由SCSI适配器发送一个SCSI命令。</a>
+(2) 命令封装到TCP/IP包中并送入到以太网络。
+(3) 接收方从TCP/IP包中抽取SCSI命令并执行相关操作。
+(4) 把返回的SCSI命令和数据封装到TCP/IP包中，将它们发回到发送方。
+(5) 系统提取出数据或命令，并把它们传回SCSI子系统。
+
+
+<br><strong>3 IP-SAN工作原理</strong>
+<b>3.1 iSCSI简介：</b>
+SCSI 主要是透过 TCP/IP 的技术，将储存设备端透过 iSCSI target (iSCSI 目标) 功能，做成可以提供磁盘的服务器端，再透过 iSCSI initiator (iSCSI 初始化用户) 功能，做成能够挂载使用 iSCSI target 的客户端，如此便能透过 iSCSI 协议来进行磁盘的应用了 。
+也就是说，iSCSI 这个架构主要将储存装置与使用的主机分为两个部分，分别是：
+iSCSI target：就是储存设备端，存放磁盘或 RAID 的设备，目前也能够将 Linux 主机仿真成 iSCSI target 了！目的在提供其他主机使用的『磁盘』；
+iSCSI initiator：就是能够使用 target 的客户端，通常是服务器。 也就是说，想要连接到 iSCSI target 的服务器，也必须要安装 iSCSI initiator 的相关功能后才能够使用 iSCSI target 提供的磁盘就是了。
+3.2 IP-SAN工作工程如下
+Initiator发出请求后，会在本地的操作系统会生成了相应的SCSI命令和数据I/O请求，然后这些命令和请求被封装加密成IP信息包，通过以太网（TCP/IP）传输到Targer。
+当Targer接收到信息包时，将进行解密和解析，将SCSI命令和I/O请求分开。SCSI命令被发送到SCSI控制器，再传送到SCSI存储设备。
+设备执行SCSI命令后的响应，经过Target封装成iSCSI响应PDU，再通过已连接的TCP/IP网络传送给Initiator。
+Initiator会从iSCSI响应PDU里解析出SCSI响应并传送给操作系统，操作系统再响应给应用程序。
+<br>
+<em>4 服务端</em>
+<br>
+<i>4.1 代码</i>
+<br>
+<strong>4.2 编译</strong>
+<br>
+<b>4.3 配置</b>
+<b>5 客户端</b>
+<br>
+<em><strong>5.1 代码</strong></em>
+<ins><em><strong>5.2 编译</strong></em></ins>
+<br>
+<del>5.3 配置</del>
+<br>
+<s>6 文件是如何读取的</s>
+<br>
+7 硬盘是如何管理的
+<br>
+<ins>8 IP-SAN应用场景</ins>
+根据IP-SAN存储设备不同、可以应用与大型监控集中数据存储、企业数据中心、教育资源中心、广电媒资后台等等。
+<br>
+<u>9 IP-SAN使用说明</u>
+9.1 硬件设备安装
+IP-SAN硬件部署比较简单，网络管理人员也可部署，这也是IP-SAN优点之一；
+在开始安装前，需要一下物品：
+<div>
+<ins>
+1.网络存储设备；
+2.电源线；
+3.千兆(百兆)网线；
+9.2 IP-SAN初始化
+</ins>
+</div>
+要访问IP-SAN，首先要连接IPSAN，IP-SAN有两种连接方式
+方式一：用网线连接IP-SAN和PC机，这样的好处是IP-SAN上的硬盘读写比较快，IP-SAN与PC一对一；
+方式二：用网线连接IP-SAN和路由器/交换机，这样能使多台PC机访问IP-SAN，可供整个网络使用；
+初始化IP-SAN
+新IP-SAN刚接入硬盘后需要进行一些初始化后才能正常使用，通过网络存储设备厂家提供的IP地址，进入网络存储管理系统，进行一些相应的配置；下面就来介绍一下存储管理系统；
+<br>
+<!-- <img src="../img/zero.jpg" alt="图片未显示">
+<br>
+<img src="../img/双笙1.jpg" alt="one" title="precute one">
+<br>
+<img src="../img/ss.jpg" alt="no data" title="no num" border="0" width="100px"> -->
+9.3 存储管理系统
+9.3.1 RAID管理
+IP-SAN上的磁盘要放在阵列上才能使用，一个新的IP-SAN,它的存储管理体统的阵列信息是空的。这是需要创建一个阵列，阵列有三种类型：RAID0,RAID1,RAID5，能够选择IP-SAN的哪些磁盘放在阵列上。
+9.3.2 存储管理
+创建好阵列后，进入存储管理，会看到系统管理信息中的系统总容量、系统空闲容量为0MB和物理卷信息为空。
+这时我们需要将新创建的空闲阵列添加到虚拟存储池。
+阵列添加到存储池成功后，会看到物理卷信息和系统管理信息中的系统总容量、系统空闲容量都不为空。
+<h4 id="test">9.4 配置IP-SAN存储服务器</h4>
+<br>
+<a href="http://www.baidu.com" target="_blank" >百度</a>
+<br>
+<!-- <a href="p19-图像标签.html"><img src="../img/zero.jpg" ></a> -->
+9.4.1 windows系统配置方式
+要想从存储设备操作，要要先搭建服务器，根据服务器的IP地址、账号和密码才能进一步操作；
+在IPSAN的存储管理系统上配置好后，pc机或服务器要访问IPSAN，可通过“iSCSI发起程序”将IPSAN中的硬盘添加到pc机或服务器上。
+具体添加步骤：
+<a href="../img/ss.rar" target="_blank">download</a>
+在pc机或服务器上点击”开始”—>”管理工具”—>”iSCSI发起程序”，在“目标”一栏中输入要访问的IPSAN的IP地址，然后点击“快速连接”即可将在IPSAN的存储管理系统上开启iSCSI服务的LUN添加到pc机或服务器的本地上。
+也可以在“发现”的“发现门户”中输入要添加门户的IP地址，这是就会在“目标”的“已发现的目标”中出现在IPSAN的存储管理系统上开启iSCSI服务的LUN，这时我们可以选择要连接的目标。
+连接好目标后，还需要进入磁盘管理（右击”计算机”—>”管理”—>”存储”—>”磁盘管理”）,对新添加上的磁盘进行联机、初始化和分配空间等等。磁盘1就是新添加的IPSAN上的磁盘。右键磁盘1—>联机，联机后还需要初始化：右键磁盘1—>初始化磁盘，使用MBR形式进行初始化。
+最后对磁盘进行分配空间。分配磁盘空间时，一般采用的文件系统为exFAT。分配好磁盘空间后，在计算机上配置IP-SAN磁盘可见，即可把IP-SAN磁盘当作本地磁盘使用。
+9.4.2 linux配置方式 
+9.4.2.1 简要说明
+<h6>IP-SAN的运行模式：C/S模式，工作端口3260</h6>
+服务端：服务名-target        机器A（目标）
+客户端：服务名-initator        机器B（发起人）.
+9.4.2.2 配置服务端
+安装target
+[root@机器A ~]# yum -y install epel-release
+[root@机器A Desktop]# yum install -y scsi-target-utils
+查看主配置文件：
+[root@机器A ~]# ls  /etc/tgt/targets.conf
+新建存储分区： sda4  大小5G
+[root@机器A ~]# fdisk /dev/sda    #划分出sda4分区
+WARNING: DOS-compatible mode is deprecated. It's strongly recommended to
+         switch off the mode (command 'c') and change display units to
+         sectors (command 'u').
+Command (m for help): p
+Disk /dev/sda: 21.5 GB, 21474836480 bytes
+255 heads, 63 sectors/track, 2610 cylinders
+Units = cylinders of 16065 * 512 = 8225280 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk identifier: 0x000b8b35
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sda1   *           1          26      204800   83  Linux
+Partition 1 does not end on cylinder boundary.
+/dev/sda2              26        1301    10240000   83  Linux
+/dev/sda3            1301        1428     1024000   82  Linux swap / Solaris
+Command (m for help): n
+Command action
+   e   extended
+   p   primary partition (1-4)
+p
+Selected partition 4
+First cylinder (1428-2610, default 1428):
+Using default value 1428
+Last cylinder, +cylinders or +size{K,M,G} (1428-2610, default 2610): +5G
+ 
+Command (m for help): w
+The partition table has been altered!
+Calling ioctl() to re-read partition table.
+WARNING: Re-reading the partition table failed with error 16: Device or resource busy.
+The kernel still uses the old table. The new table will be used at
+the next reboot or after you run partprobe(8) or kpartx(8)
+Syncing disks.
+[root@thinkmo3 ~]#reboot 或者 partx -a /dev/sda  #使分区生效，多执行几次即可
+配置sda4共享
+修改配置文件
+[root@机器A ~]# vim /etc/tgt/targets.conf       #写入以下内容
+下面这段内容是参考模板，不用写入文件
+ 75 #<target iqn.2008-09.com.example:server.target4>
+ 76 #    direct-store /dev/sdb      # Becomes LUN 1
+ 77 #    direct-store /dev/sdc      # Becomes LUN 2
+ 78 #    direct-store /dev/sdd      # Becomes LUN 3
+ 79 #    write-cache off
+ 80 #    vendor_id MyCompany Inc.
+ 81 #</target>
+ 
+在上面模版后面新增内容为：
+<target iqn.2018-01.cn.thinkmo.www:target_san1>
+         backing-store  /dev/sda4
+         initiator-address 192.168.1.64
+         vendor_id  thinkmo
+         product_id   target1
+</target>
+注释：
+default-driver iscsi      #此配置文件默认全部注释，使用iscsi驱动  
+<tarrget iqn.2018-1.cn.thinkmo.www:target_san1>  # iscsi正规名字格式：  iqn.年－月.主机名倒着写: target端名字
+backing-store /dev/hda4     #可以是具体的分区，也可以是DD出来的文件。不能小于5G。 （后面的文件系统是GFS，光日志空间就128M）        
+initiator-address 192.168.1.62   #指定允许访问的此存储主机
+initiator-address 192.168.1.64   #指定允许访问的此存储主机
+vendor_id “thinkmo”    #vendor是供应厂商编号标识这个设备（字符不要过长）
+product_id "TARGET1"     # 产品编号
+</target>
+启动服务
+[root@机器A Desktop]# systemctl restart tgtd
+[root@机器A Desktop]# tgt-admin  –show  查看状态
+Target 1: iqn.2018-01.cn.thinkmo.www:target_san1
+    System information:
+        Driver: iscsi
+        State: ready
+    I_T nexus information:
+    LUN information:
+        LUN: 0
+            Type: controller
+            SCSI ID: IET     00010000
+            SCSI SN: beaf10
+            Size: 0 MB, Block size: 1
+            Online: Yes
+            Removable media: No
+            Prevent removal: No
+            Readonly: No
+            SWP: No
+            Thin-provisioning: No
+            Backing store type: null
+            Backing store path: None
+            Backing store flags: 
+    Account information:
+    ACL information:
+        192.168.226.128
+
+9.4.2.3 配置客户端
+配置客户端： 机器B
+安装包：
+[root@机器B ~]# yum install -y iscsi-initiator-utils
+启动客户端服务：
+[root@机器B~]# systemctl start iscsid #直接启动没有任何反应, 这里首先要发现target存储，再启动客户端服务，才有效
+[root@机器B~]# iscsiadm -m discovery -t sendtargets -p 192.168.1.63:3260
+错误解决，在服务端开启防火墙即可
+ 
+服务端操作
+[root@desktop ~]# systemctl start firewalld
+[root@desktop ~]# systemctl status firewalld
+开启服务端中共享存储设备的端口，重新加载后查看列出《服务端》
+[root@desktop ~]# firewall-cmd --permanent --add-port=3260/tcp
+success
+[root@desktop ~]# firewall-cmd --reload
+success
+[root@desktop ~]# firewall-cmd --list-all
+ 
+再次尝试发现ip为172.25.254.128的共享存储设备，发现可以找到共享存储设备《客户端》
+[root@机器B~]# iscsiadm -m discovery -t sendtargets -p 192.168.1.63:3260
+192.168.1.63:3260,1 iqn.2018-01.cn.thinkmo.www:target_san1
+target存储服务器信息在客户端存储的位置：
+[root@机器B~]# yum install -y tree      #安装tree命令，用于查询树
+[root@机器B~]# tree /var/lib/iscsi/       #发现target后，会在此目录先生成树结构
+/var/lib/iscsi/
+├── ifaces
+├── isns
+├── nodes
+│   └── iqn.2015-01.cn.thinkmo.www:target_san1
+│       └── 192.168.1.63,3260,1
+│           └── default
+├── send_targets
+│   └── 192.168.1.63,3260
+│       ├── iqn.2015-01.cn.thinkmo.www:target_san1,192.168.1.63,3260,1,default -> /var/lib/iscsi/nodes/iqn.2015-01.cn.thinkmo.www:target_san1/192.168.1.63,3260,1
+│       └── st_config
+├── slp
+└── static
+客户端服务启动关系
+ 
+先启动iscsid，再启动iscsi，iscsi是根据/var/lib/iscsi/中发现的信息，识别设备
+[root@机器B~]#systemctl start iscsid  #先启动iscsid
+[root@机器B~]# systemctl start iscsi   # 根据/var/lib/iscsi/  中发现的信息，识别设备
+Stopping iscsi:                                            [  OK  ]
+Starting iscsi:                                            [  OK  ]
+查看发现到新硬盘：
+[root@机器B~]# ll /dev/sdb
+brw-rw---- 1 root disk 8, 16 Jul 30 19:11 /dev/sdb
+关闭/卸载：
+[root@机器B~]# systemctl stop iscsi
+[root@机器B~]# systemctl stop iscsid
+[root@机器B~]# ls /dev/sdb  #查看设备不存在
+ls: cannot access /dev/sdb: No such file or directory
+登录：
+[root@机器B~]# systemctl restart iscsi
+[root@机器B~]# ls /dev/sdb  
+/dev/sdb
+彻底退出：
+[root@机器B~]# systemctl stop iscsi
+[root@机器B~]# rm -rf /var/lib/iscsi/*
+10 总结
+ISCSI存储有IP-SAN和FC-SAN两种，IP-SAN具有价格实惠，使用方便、搭建容易等优势；Linux下配置iSCSI步骤网上资料较多且方法不一致、但目的都是配置服务端（initiator）和客户端（target），最终实现对外设存储的获取与访问。
+
+
+</body>
+</html>

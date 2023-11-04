@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 合并单元格方式：
+    跨行合并：rowspan="合并单元格的个数"
+    跨列合并：colspan="合并单元格的个数" -->
+
+    <!-- 目标单元格：
+    跨行：最上侧单元格为目标单元格，写合并代码
+    跨列：最左侧单元格为目标单元格，写合并代码 -->
+
+    <!-- 合并单元格三部曲
+    1.先确定是跨行化石跨列合并。
+    2.找到目标单元格，写上合并方式 = 合并单元格数量。比如：<td colspan= "2" ></td>
+    3.删除多余的单元格 -->
+    <table width="800px" height="400px" align="center" border="1" cellspacing="0">
+        <!-- <thead> -->
+            <tr>
+                <td></td>
+                <td colspan="2"></td>
+                <!-- <td></td> -->
+            </tr>
+        <!-- </thead> -->
+        <tbody>
+            <tr>
+                <td rowspan="2"></td>
+                <td>1</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <!-- <td></td> -->
+                <td>2</td>
+                <td>2</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
